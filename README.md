@@ -1,34 +1,22 @@
 ## Haproxy Dockerfile
 
 
-This repository contains **Dockerfile** of [Haproxy](http://haproxy.1wt.eu/) for [Docker](https://www.docker.com/)'s [automated build](https://registry.hub.docker.com/u/dockerfile/haproxy/) published to the public [Docker Hub Registry](https://registry.hub.docker.com/).
+Run haproxy in docker to serve wwebsites from other docker container
 
+Thanks to [Barker's Bits and Bytes](http://blog.dbdevs.com/2014/12/docker-adding-haproxy-and-fig-to-my.html)
 
-### Base Docker Image
-
-* [dockerfile/ubuntu](http://dockerfile.github.io/#/ubuntu)
-
-
-### Installation
-
-1. Install [Docker](https://www.docker.com/).
-
-2. Download [automated build](https://registry.hub.docker.com/u/dockerfile/haproxy/) from public [Docker Hub Registry](https://registry.hub.docker.com/): `docker pull dockerfile/haproxy`
-
-   (alternatively, you can build an image from Dockerfile: `docker build -t="dockerfile/haproxy" github.com/dockerfile/haproxy`)
+As we are running the haproxy container using --link to the other containers, we do not need to know their ip addresses nor expose their ports. Docker will take care of that
 
 
 ### Usage
 
-    docker run -d -p 80:80 dockerfile/haproxy
+     docker run -d -p 80:80 -v ~/haproxy-config:/haproxy-override --name haproxy --link nginx:nginx dockerfile/haproxy
+     
+     Assuming nginx is the name of the container serving the website.
 
-#### Customizing Haproxy
+~/haproxy-config should contain
 
-    docker run -d -p 80:80 -v <override-dir>:/haproxy-override dockerfile/haproxy
-
-where `<override-dir>` is an absolute path of a directory that could contain:
-
-  - `haproxy.cfg`: custom config file (replace `/dev/log` with `127.0.0.1`, and comment out `daemon`)
+  - `haproxy.cfg`: custom config file
   - `errors/`: custom error responses
 
-After few seconds, open `http://<host>` to see the haproxy stats page.
+Sample haproxy.cfg is provided
