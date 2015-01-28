@@ -7,6 +7,8 @@ Thanks to [Barker's Bits and Bytes](http://blog.dbdevs.com/2014/12/docker-adding
 
 As we are running the haproxy container using --link to the other containers, we do not need to know their ip addresses nor expose their ports. Docker will take care of that
 
+The other containers must be run before the haproxy container is run
+
 
 ### Usage
 
